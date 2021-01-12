@@ -1,0 +1,76 @@
+Creating columns
+In this chapter, you'll learn how to use the methods defined by Spark's DataFrame class to perform common data operations.
+Let's look at performing column-wise operations. In Spark you can do this using the .withColumn() method, which takes two arguments. First, a string with the name of your new column, and second the new column itself.
+The new column must be an object of class Column. Creating one of these is as easy as extracting a column from your DataFrame using df.colName.
+Updating a Spark DataFrame is somewhat different than working in pandas because the Spark DataFrame is immutable. This means that it can't be changed, and so columns can't be updated in place.
+Thus, all these methods return a new DataFrame. To overwrite the original DataFrame you must reassign the returned DataFrame using the method like so:
+df = df.withColumn("newCol", df.oldCol + 1)
+The above code creates a DataFrame with the same columns as df plus a new column, newCol, where every entry is equal to the corresponding entry from oldCol, plus one.
+To overwrite an existing column, just pass the name of the column as the first argument!
+Remember, a SparkSession called spark is already in your workspace.
+
+
+Q....Use the spark.table() method with the argument "flights" to create a DataFrame containing the values of the flights table in the .catalog. Save it as flights.
+Show the head of flights using flights.show(). The column air_time contains the duration of the flight in minutes.
+Update flights to include a new column called duration_hrs, that contains the duration of each flight in hours.
+
+# Create the DataFrame flights
+
+flights = spark.table("flights")
+
+
+# Show the head
+
+flights.show()
+
+
+# Add duration_hrs
+
+flights = flights.withColumn("duration_hrs", flights.air_time/60)
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Filtering Data
+Now that you have a bit of SQL know-how under your belt, it's easier to talk about the analogous operations using Spark DataFrames.
+
+Let's take a look at the .filter() method. As you might suspect, this is the Spark counterpart of SQL's WHERE clause. The .filter() method takes either an expression that would follow the WHERE clause of a SQL expression as a string, or a Spark Column of boolean (True/False) values.
+
+For example, the following two expressions will produce the same output:
+
+flights.filter("air_time > 120").show()
+flights.filter(flights.air_time > 120).show()
+Notice that in the first case, we pass a string to .filter(). In SQL, we would write this filtering task as SELECT * FROM flights WHERE air_time > 120. Spark's .filter() can accept any expression that could go in the WHEREclause of a SQL query (in this case, "air_time > 120"), as long as it is passed as a string. Notice that in this case, we do not reference the name of the table in the string -- as we wouldn't in the SQL request.
+
+In the second case, we actually pass a column of boolean values to .filter(). Remember that flights.air_time > 120 returns a column of boolean values that has True in place of those records in flights.air_time that are over 120, and False otherwise.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Machine Learning Pipelines
+In the next two chapters you'll step through every stage of the machine learning pipeline, from data intake to model evaluation. Let's get to it!
+
+At the core of the pyspark.ml module are the Transformer and Estimator classes. Almost every other class in the module behaves similarly to these two basic classes.
+
+Transformer classes have a .transform() method that takes a DataFrame and returns a new DataFrame; usually the original one with a new column appended. For example, you might use the class Bucketizer to create discrete bins from a continuous feature or the class PCA to reduce the dimensionality of your dataset using principal component analysis.
+
+Estimator classes all implement a .fit() method. These methods also take a DataFrame, but instead of returning another DataFrame they return a model object. This can be something like a StringIndexerModel for including categorical data saved as strings in your models, or a RandomForestModel that uses the random forest algorithm for classification or regression.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Data types
+Good work! Before you get started modeling, it's important to know that Spark only handles numeric data. That means all of the columns in your DataFrame must be either integers or decimals (called 'doubles' in Spark).
+
+When we imported our data, we let Spark guess what kind of information each column held. Unfortunately, Spark doesn't always guess right and you can see that some of the columns in our DataFrame are strings containing numbers as opposed to actual numeric values.
+
+To remedy this, you can use the .cast() method in combination with the .withColumn() method. It's important to note that .cast() works on columns, while .withColumn() works on DataFrames.
+
+The only argument you need to pass to .cast() is the kind of value you want to create, in string form. For example, to create integers, you'll pass the argument "integer" and for decimal numbers you'll use "double".
+
+You can put this call to .cast() inside a call to .withColumn() to overwrite the already existing column, just like you did in the previous chapter!
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Strings and factors
+As you know, Spark requires numeric data for modeling. So far this hasn't been an issue; even boolean columns can easily be converted to integers without any trouble. But you'll also be using the airline and the plane's destination as features in your model. These are coded as strings and there isn't any obvious way to convert them to a numeric data type.
+
+Fortunately, PySpark has functions for handling this built into the pyspark.ml.features submodule. You can create what are called 'one-hot vectors' to represent the carrier and the destination of each flight. A one-hot vector is a way of representing a categorical feature where every observation has a vector in which all elements are zero except for at most one element, which has a value of one (1).
+
+Each element in the vector corresponds to a level of the feature, so it's possible to tell what the right level is by seeing which element of the vector is equal to one (1).
+
+The first step to encoding your categorical feature is to create a StringIndexer. Members of this class are Estimators that take a DataFrame with a column of strings and map each unique string to a number. Then, the Estimator returns a Transformer that takes a DataFrame, attaches the mapping to it as metadata, and returns a new DataFrame with a numeric column corresponding to the string column.
+
+The second step is to encode this numeric column as a one-hot vector using a OneHotEncoder. This works exactly the same way as the StringIndexer by creating an Estimator and then a Transformer. The end result is a column that encodes your categorical feature as a vector that's suitable for machine learning routines!
+
+This may seem complicated, but don't worry! All you have to remember is that you need to create a StringIndexer and a OneHotEncoder, and the Pipeline will take care of the rest.
+

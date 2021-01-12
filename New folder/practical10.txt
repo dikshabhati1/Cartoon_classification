@@ -1,0 +1,58 @@
+\documentclass{beamer}
+\usepackage{amsmath,amssymb,graphicx,pstricks}
+\title{Projectile Motion}
+\author{Diksha Bhati}
+\institute{\textbf{SCRAS\\University of Delhi\\Delhi}}
+\date{10-October 2020}
+\usetheme{Warsaw}
+\begin{document}
+
+\maketitle
+\begin{frame}{Projectile Motion}
+\begin{block}{What is Projectile}
+
+A projectile is any object thrown by the exertion of a force.It can also be defined as object launched into the space an allowed to move free under the influence of gravity and air resistance.
+\end{block}
+\begin{block}{What is Projectile motion}
+Projectile motion is a form of motion experienced by an object or particle (a projectile) that is projected near the earth's surface and moves along a curve path under the action of gravity only (in particular,the effects of air resistance are assumed to be negligible).
+\end{block}
+\end{frame}
+
+\begin{frame}{Projectile Motion}
+\begin{pspicture}(2,2)
+\psset{unit=0.6}
+\psline(1,1)(13,1)(13,6)(1,1)
+\psline(12.5,1)(12.5,1.5)(13,1.5)
+\put(6.5,4){V(0)}
+\put(13.25,3){$v_0\sin\alpha$}
+\put(6.5,-0.001){$v_0\cos\alpha$}
+\end{pspicture}\\
+\textbf{Components of the initial velocity vector V(0)}\\
+\end{frame}
+
+\begin{frame}{Projectile Motion}
+
+The velocity V(t) of the projectile can  be obtained by integrating A(t) :\\
+$$V(t)=\int{A}(t)dt=\int{(-g\textbf{j})}dt=-gt\textbf{j}+ C$$\\
+where $C=V(t)$ is the velocity when t=0 (i.e. the initial velocity).Because the projectile is fired with initial speed 
+$v_0=|V(0)|$ at an angle of a elevation $\alpha$ , the initial velocity must be\\
+$$C_1=\textbf{V(0)}=v_0\cos\alpha\textbf{i}+v_0\sin\alpha\textbf{j}$$\\
+and by substitution we find  
+$$V(t)=-gt\textbf{j}+(v_0\cos\alpha\textbf){i}+(v_0\sin\alpha\textbf){j}$$
+\end{frame}
+\begin{frame}{Projectile Motion}
+$$V(t)=(v_0\cos\alpha)\textbf{i}+(v_0\sin\alpha-gt)\textbf{j}$$\\
+Next, by integrating \textbf{V} with respect to t, we find that the position vector of the projectile is
+$$\textbf{R}(t)=\int{V(t)}dt=\int[(v_0\cos\alpha)\textbf{i}+(v_0\sin\alpha-gt)\textbf{j}]dt$$
+$$=(v_0\cos\alpha)t\textbf{i}+[(v_0\sin\alpha)t-\frac{1}{2}gt^2]\textbf{j}+C_0$$
+where $C_2=R(0)$ is the position at time t=0.
+\end{frame}
+
+\begin{frame}{Projectile Motion}
+Because the projectile begins its flight at P,the initial position is $\textbf{R(0)}=s_0\textbf{j}$,and by substituting this expression this expression for $C_2$,we find that the position at time t is\\
+\begin{block}
+$$\textbf{R}(t)=[(v_0\cos\alpha)t]\textbf{i}+[(v_0\sin\alpha)t-\frac{1}{2}gt^2+s_0]\textbf{j}$$
+\end{block} 
+Specifically \textbf{R}(t) gives the position of the projectile at any time \textbf{t} after it is fired and before it hits the ground.If we let $x(t)$ and $y(t)$ denote the horizontal and vertical components of \textbf{R}(t),respectively, we can make the following statement.
+\end{frame}
+\end{document}

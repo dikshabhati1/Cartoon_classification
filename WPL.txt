@@ -1,0 +1,128 @@
+# Kings XI Punjab noball runs when Royal Challengers Bangalore were doing balling
+RCB_0=len(noball_df[(noball_df['bowling_team']=='Royal Challengers Bangalore')&(noball_df['noball_runs']==0)&(noball_df['batting_team']=='Kings XI Punjab')])
+RCB_1=len(noball_df[(noball_df['bowling_team']=='Royal Challengers Bangalore')&(noball_df['noball_runs']==1)&(noball_df['batting_team']=='Kings XI Punjab')]) 
+RCB_2=len(noball_df[(noball_df['bowling_team']=='Royal Challengers Bangalore')&(noball_df['noball_runs']==2)&(noball_df['batting_team']=='Kings XI Punjab')]) 
+RCB_3=len(noball_df[(noball_df['bowling_team']=='Royal Challengers Bangalore')&(noball_df['noball_runs']==3)&(noball_df['batting_team']=='Kings XI Punjab')]) 
+RCB_4=len(noball_df[(noball_df['bowling_team']=='Royal Challengers Bangalore')&(noball_df['noball_runs']==4)&(noball_df['batting_team']=='Kings XI Punjab')]) 
+RCB_5=len(noball_df[(noball_df['bowling_team']=='Royal Challengers Bangalore')&(noball_df['noball_runs']==5)&(noball_df['batting_team']=='Kings XI Punjab')])
+
+# Royal Challengers Bangalore noball runs when Rajasthan Royal were doing balling
+KP_0=len(noball_df[(noball_df['bowling_team']=='Kings XI Punjab')&(noball_df['noball_runs']==0)&(noball_df['batting_team']=='Royal Challengers Bangalore')]) 
+KP_1=len(noball_df[(noball_df['bowling_team']=='Kings XI Punjab')&(noball_df['noball_runs']==1)&(noball_df['batting_team']=='Royal Challengers Bangalore')]) 
+KP_2=len(noball_df[(noball_df['bowling_team']=='Kings XI Punjab')&(noball_df['noball_runs']==2)&(noball_df['batting_team']=='Royal Challengers Bangalore')]) 
+KP_3=len(noball_df[(noball_df['bowling_team']=='Kings XI Punjab')&(noball_df['noball_runs']==3)&(noball_df['batting_team']=='Royal Challengers Bangalore')]) 
+KP_4=len(noball_df[(noball_df['bowling_team']=='Kings XI Punjab')&(noball_df['noball_runs']==4)&(noball_df['batting_team']=='Royal Challengers Bangalore')]) 
+KP_5=len(noball_df[(noball_df['bowling_team']=='Kings XI Punjab')&(noball_df['noball_runs']==5)&(noball_df['batting_team']=='Royal Challengers Bangalore')])
+
+# % of 2-5 noball balls
+percentage_RCB=(RCB_1+RCB_2+RCB_3+RCB_4+RCB_5)/(RCB_0+RCB_1+RCB_2+RCB_3+RCB_4+RCB_5)*100
+percentage_KP=(KP_1+KP_2+KP_3+KP_4+KP_5)/(KP_0+KP_1+KP_2+KP_3+KP_4+KP_5)*100
+
+#print
+print('% of 2-5 noball of Royal Challengers Bangalore',percentage_RCB)
+print('% of 2-5 noball of Kings XI Punjab',percentage_KP)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+plt.hist(match_wickets['win_by_wickets'])
+plt.title('Kings XI Punjab')
+plt.xlabel('win_by_wickets')
+plt.ylabel('count')
+plt.show()
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+wickets_mi=match_wickets[match_wickets['winner']=='Mumbai Indians']
+a=sum(wickets_mi['win_by_wickets'])/len(wickets_mi)
+print('Average win by wickets of MI against KKR are',a)
+
+# these win_by_wickets are for 20 over but when the over will be 6-15 their are 10 overs
+# so we have to divide by 2 to get win_by_wickets in over 6-15
+print('Win by wickets when the over willl be 6-15 are',a/2)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import numpy as np
+
+# checking Warner in top 10 batsman
+batting_tot=deliveries_df.groupby('batsman').apply(lambda x:np.sum(x['batsman_runs'])).reset_index(name='Runs')
+batting_sorted=batting_tot.sort_values(by='Runs',ascending=False)
+top_batsmen=batting_sorted[:10] 
+plt.bar(top_batsmen['batsman'],top_batsmen['Runs'])
+plt.scatter(top_batsmen['batsman'],top_batsmen['Runs'],color='r')
+plt.xticks(rotation=90)
+plt.xlabel('Top 10 Batsmen',size=10)
+plt.ylabel('Runs Scored',size=10)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# taking KKR and KXIP ipl 2020 batsman 
+batsman_20 = deliveries_df[(deliveries_df['batsman']=='RG Sharma') | (deliveries_df['batsman']=='S Rutherford') |
+                           (deliveries_df['batsman']=='SA Yadav')  | (deliveries_df['batsman']=='CA Lynn') | 
+                           (deliveries_df['batsman']=='SS Tiwary') | (deliveries_df['batsman']=='Ishan Kishan') |
+                           (deliveries_df['batsman']=='Q de Kock') | (deliveries_df['batsman']=='AP Tare') |
+                           (deliveries_df['batsman']=='HH Pandya') | (deliveries_df['batsman']=='KA Pollard') | 
+                           (deliveries_df['batsman']=='KH Pandya') | (deliveries_df['batsman']=='SPD Smith') | 
+                           (deliveries_df['batsman']=='M Vohra') | (deliveries_df['batsman']=='RV Uthappa') |
+                           (deliveries_df['batsman']=='S Singh') | (deliveries_df['batsman']=='R Parag') |
+                           (deliveries_df['batsman']=='DA Miller') | (deliveries_df['batsman']=='JC Buttler') | 
+                           (deliveries_df['batsman']=='T Curran') | (deliveries_df['batsman']=='BA Stokes') |
+                           (deliveries_df['batsman']=='S Gopal') | (deliveries_df['batsman']=='M Lomror') |
+                           (deliveries_df['batsman']=='SV Samson')]
+
+
+# boundary runs 
+boundaryrun_given = batsman_20[(batsman_20['total_runs']==4) | (batsman_20['total_runs']==6)]
+
+# runs = 1 or 2 or 3
+lessrun_given = batsman_20[(batsman_20['total_runs']==1) | (batsman_20['total_runs']==2) | (batsman_20['total_runs']==3)]
+
+
+
+
+list_batsman1 = ['RG Sharma' , 'S Rutherford' , 'SA Yadav' , 'CA Lynn' , 'SS Tiwary' ,'Ishan Kishan' ,
+                'Q de Kock' , 'AP Tare' , 'HH Pandya' , 'KA Pollard', 'KH Pandya' , 'SPD Smith' ,'M Vohra' , 'RV Uthappa' ,
+                  'S Singh' , 'R Parag' , 'JC Buttler' , 'DA Miller' , 'T Curran' , 'BA Stokes' , 
+                 'S Gopal' , 'SV Samson' , 'M Lomror' ]
+
+
+for i in list_batsman1:
+    x = boundaryrun_given[boundaryrun_given['batsman']==i]  
+    y = lessrun_given[lessrun_given['batsman']==i] 
+    w = batsman_20[batsman_20['batsman']==i]     
+    numerator = sum(w['total_runs']) + sum(x['total_runs'])
+    denominator = len(batsman_20)
+    bis = numerator/denominator
+    print('BIS of' , i , 'is' ,bis)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+mi_bowlers = ['HH Pandya','KH Pandya','KA Pollard','A Roy','DS Kulkarni','JJ Bumrah','RD Chahar','TA Boult','J Yadav','']
+
+rcb_bolers - ['CH Morris','M Ali','Washington Sundar','S Dube','P Negi','Mohammed Siraj','N Saini','YS Chahal','A Zampa','DW Steyn']
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+mi_batsman = batsman = ['RG Sharma' , 'S Rutherford' , 'SA Yadav','CA Lynn' , 'SS Tiwary' ,'Ishan Kishan' , 'Q de Kock' , 'HH Pandya','KH Pandya','KA Pollard','A Roy' ]
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Run Out is not considered as a wicket in the Bowler's account- hence we shall be removing them first
+bowling_wickets=file[file['dismissal_kind']!='run out']
+bowling_tot=bowling_wickets.groupby('bowler').apply(lambda x:x['dismissal_kind'].dropna()).reset_index(name='Wickets')
+bowling_wick_count=bowling_tot.groupby('bowler').count().reset_index()
+bowling_top=bowling_wick_count.sort_values(by='Wickets',ascending=False)
+top_bowlers=bowling_top.loc[:,['bowler','Wickets']][0:10] 
+
+
+------------------------------------------------------------------------------
+dc_bowler = 'A Mishra','AR Patel','I Sharma','K Rabada','K Paul','R Ashwin','MM Sharma',
+
+DC_BATSMAN =SS Iyer','AM Rahane','AR Patel','K Paul','P Shaw', 'RR Pant','S Dhawan'
+-----------------------------------------------------------------------------------------------------------------------
+rcb_batsman = 'V Kohli','AB de Villiers','AJ Finch','PA Patel','CH Morris','M Ali','Washington Sundar'
+
+srh batsman ='DA Warner','KS Williamson','MK Pandey','R Singh','SE Marsh','V Shankar','Mohammad Nabi',
+           'Rashid Khan','SA Yadav','SP Goswami','WP Saha'
+
+
+
+
+
+
+
+
+
+
+
+
+
